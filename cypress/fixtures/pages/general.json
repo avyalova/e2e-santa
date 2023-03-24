@@ -1,4 +1,5 @@
 {
   "arrowRight": ".btn-arrow-right",
-  "submitButton": ".btn-main"
+  "submitButton": ".btn-main",
+  "mainButton": ".form-page__buttons > .btn-main"
 }

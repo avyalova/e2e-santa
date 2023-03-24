@@ -1,19 +1,21 @@
 {
   "userAutor": {
-    "email": "ommelnikova+test@gmail.com",
-    "password": "test1234",
-    "name": "oksana-autor"
+    "email": "washingtonqwerty@gmail.com",
+    "password": "123456",
+    "name": "Ruslan Taskayev"
   },
   "user1": {
-    "email": "ommelnikova+test1@gmail.com",
-    "password": "test1234",
-    "name": "oksana1"
+    "email": "ja-rus_89@mail.ru",
+    "password": "123456",
+    "name": "Anna"
   },
+
   "user2": {
-    "email": "ommelnikova+test2@gmail.com",
-    "password": "test1234",
-    "name": "oksana2"
+    "email": "anna_vyalova@yahoo.com",
+    "password": "123456",
+    "name": "AnnaTest2"
   },
+
   "user3": {
     "email": "ommelnikova+test3@gmail.com",
     "password": "test1234",
