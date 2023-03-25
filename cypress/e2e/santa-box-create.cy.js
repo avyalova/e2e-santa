@@ -20,16 +20,19 @@ describe("user can create a box and run it", () => {
   //пользователь 1 логинится
   //пользователь 1 запускает жеребьевку
   let newBoxName = faker.word.noun({ length: { min: 5, max: 10 } })
+  let idBox = faker.word.noun({ length: { min: 5, max: 7 } })
   let wishes = faker.word.noun() + faker.word.adverb() + faker.word.adjective()
   let maxAmount = 50
   let currency = "Евро"
   let inviteLink
+  let cookie_connect_sid
 
   it("user logins and create a box", () => {
     cy.visit("/login")
     cy.login(users.userAutor.email, users.userAutor.password)
     cy.contains("Создать коробку").click()
     cy.get(boxPage.boxNameField).type(newBoxName)
+    cy.get(boxPage.idBoxField).clear().type(idBox)
     cy.get(generalElements.arrowRight).click()
     cy.get(boxPage.boxIcon).click()
     cy.get(generalElements.arrowRight).click()
@@ -74,6 +77,47 @@ describe("user can create a box and run it", () => {
     cy.contains(
       "Карточки участников успешно созданы и приглашения уже отправляются."
     ).should("exist")
+    cy.contains(newBoxName).click({ force: true })
   })
 
+  it("start Loteri", () => {
+    cy.startLoteri()
+    cy.contains("Жеребьевка проведена").should("exist")
+    cy.clearAllCookies()
+  })
+
+  it("user1 checks notification about loteri", () => {
+    cy.visit("/login")
+    cy.login(users.user1.email, users.user1.password)
+    cy.get(generalElements.notificationButton).click()
+    cy.contains(
+      `У тебя появился подопечный в коробке "${newBoxName}". Скорее переходи по кнопке, чтобы узнать кто это!`
+    ).should("exist")
+    cy.clearCookies()
+  })
+
+  it("user2 checks notification about loteri", () => {
+    cy.visit("/login")
+    cy.login(users.user2.email, users.user2.password)
+    cy.get(generalElements.notificationButton).click()
+    cy.contains(
+      `У тебя появился подопечный в коробке "${newBoxName}". Скорее переходи по кнопке, чтобы узнать кто это!`
+    ).should("exist")
+    cy.clearCookies()
+  })
+
+  it("user3 checks notification about loteri", () => {
+    cy.visit("/login")
+    cy.login(users.user3.email, users.user3.password)
+    cy.get(generalElements.notificationButton).click()
+    cy.contains(
+      `У тебя появился подопечный в коробке "${newBoxName}". Скорее переходи по кнопке, чтобы узнать кто это!`
+    ).should("exist")
+    cy.clearCookies()
+  })
+
+  after("delete box", () => {
+    let Api = Cypress.config("baseUrl") + "/api/box/" + idBox
+    cy.ApiDeleteBox(Api)
+  })
 })

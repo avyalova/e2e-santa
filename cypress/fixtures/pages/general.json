@@ -1,5 +1,6 @@
 {
   "arrowRight": ".btn-arrow-right",
   "submitButton": ".btn-main",
-  "mainButton": ".form-page__buttons > .btn-main"
+  "mainButton": ".form-page__buttons > .btn-main",
+  "notificationButton": ".layout-1__header-wrapper-fixed > .layout-1__header > .header > .header__items > .layout-row-start > :nth-child(2) > .header-item__text > .txt--med"
 }

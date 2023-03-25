@@ -29,6 +29,7 @@ const generalElements = require("../fixtures/pages/general.json")
 const invitePage = require("../fixtures/pages/invitePage.json")
 const inviteeBoxPage = require("../fixtures/pages/inviteeBoxPage.json")
 const inviteeDashboardPage = require("../fixtures/pages/inviteeDashboardPage.json")
+const loteriPage = require("../fixtures/pages/loteriPage.json")
 let wishes = faker.word.noun() + faker.word.adverb() + faker.word.adjective()
 import { faker } from "@faker-js/faker"
 
@@ -52,4 +53,23 @@ Cypress.Commands.add("addUserApprove", (userName, userPassword) => {
       expect(text).to.contain("Это — анонимный чат с вашим Тайным Сантой")
     })
   cy.clearCookies()
+})
+
+Cypress.Commands.add("startLoteri", () => {
+  cy.contains("Перейти к жеребьевке").click({ force: true })
+  cy.get(loteriPage.submitButton).click({ force: true })
+  cy.get(loteriPage.confirmButton).click({ force: true })
+})
+
+Cypress.Commands.add("ApiDeleteBox", (ApiUrl) => {
+  cy.request({
+    method: "DELETE",
+    headers: {
+      Cookie:
+        "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMwMDEzNzMsImlhdCI6MTY3OTc2MjQ4NywiZXhwIjoxNjc5NzY2MDg3fQ.LVHQXuVRhRsFVjODXzUUA4r6ATo4iPk1qmVsQjdOGFM; Max-Age=3600; Path=/; Expires=Sat, 25 Mar 2023 17:41:27 GMT; HttpOnly",
+    },
+    url: ApiUrl,
+  }).then((response) => {
+    expect(response.status).to.equal(200)
+  })
 })
