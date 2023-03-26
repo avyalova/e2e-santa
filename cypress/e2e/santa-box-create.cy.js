@@ -24,8 +24,6 @@ describe("user can create a box and run it", () => {
   let wishes = faker.word.noun() + faker.word.adverb() + faker.word.adjective()
   let maxAmount = 50
   let currency = "Евро"
-  let inviteLink
-  let cookie_connect_sid
 
   it("user logins and create a box", () => {
     cy.visit("/login")
@@ -83,7 +81,7 @@ describe("user can create a box and run it", () => {
   it("start Loteri", () => {
     cy.startLoteri()
     cy.contains("Жеребьевка проведена").should("exist")
-    cy.clearAllCookies()
+    //cy.clearAllCookies()
   })
 
   it("user1 checks notification about loteri", () => {
