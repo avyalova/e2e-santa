@@ -20,18 +20,17 @@ describe("user can create a box and run it", () => {
   //пользователь 1 логинится
   //пользователь 1 запускает жеребьевку
   let newBoxName = faker.word.noun({ length: { min: 5, max: 10 } })
-  //let idBox = faker.word.noun({ length: { min: 5, max: 7 } })
+  let idBox = faker.word.noun({ length: { min: 5, max: 7 } })
   let wishes = faker.word.noun() + faker.word.adverb() + faker.word.adjective()
   let maxAmount = 50
   let currency = "Евро"
-  let keyBox
 
   it("user logins and create a box", () => {
     cy.visit("/login")
     cy.login(users.userAutor.email, users.userAutor.password)
     cy.contains("Создать коробку").click()
     cy.get(boxPage.boxNameField).type(newBoxName)
-    //cy.get(boxPage.idBoxField).clear().type(idBox)
+    cy.get(boxPage.idBoxField).clear().type(idBox)
     cy.get(generalElements.arrowRight).click()
     cy.get(boxPage.boxIcon).click()
     cy.get(generalElements.arrowRight).click()
@@ -105,28 +104,30 @@ describe("user can create a box and run it", () => {
     cy.clearCookies()
   })
 
+  it("user3 checks notification about loteri", () => {
+    cy.visit("/login")
+    cy.login(users.user3.email, users.user3.password)
+    cy.get(generalElements.notificationButton).click()
+    cy.contains(
+      `У тебя появился подопечный в коробке "${newBoxName}". Скорее переходи по кнопке, чтобы узнать кто это!`
+    ).should("exist")
+    cy.clearCookies()
+  })
+
   after("delete box", () => {
     cy.request({
       method: "POST",
       url: "/api/login",
-      failOnStatusCode: false,
       method: "POST",
       body: {
-        email: users.userAutor.email,
-        password: users.userAutor.password,
+        email: "washingtonqwerty@gmail.com",
+        password: "123456",
       },
     })
 
     cy.request({
-      method: "GET",
-      url: "/api/account/boxes",
-    }).then((res) => {
-      let obj = res.body.find((item) => item.box.name == newBoxName)
-      keyBox = obj.box.key
-      cy.request({
-        method: "DELETE",
-        url: "/api/box/" + keyBox,
-      })
+      method: "DELETE",
+      url: "/api/box/" + idBox,
     })
   })
 })
