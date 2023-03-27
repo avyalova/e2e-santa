@@ -20,17 +20,18 @@ describe("user can create a box and run it", () => {
   //пользователь 1 логинится
   //пользователь 1 запускает жеребьевку
   let newBoxName = faker.word.noun({ length: { min: 5, max: 10 } })
-  let idBox = faker.word.noun({ length: { min: 5, max: 7 } })
+  //let idBox = faker.word.noun({ length: { min: 5, max: 7 } })
   let wishes = faker.word.noun() + faker.word.adverb() + faker.word.adjective()
   let maxAmount = 50
   let currency = "Евро"
+  let keyBox
 
   it("user logins and create a box", () => {
     cy.visit("/login")
     cy.login(users.userAutor.email, users.userAutor.password)
     cy.contains("Создать коробку").click()
     cy.get(boxPage.boxNameField).type(newBoxName)
-    cy.get(boxPage.idBoxField).clear().type(idBox)
+    //cy.get(boxPage.idBoxField).clear().type(idBox)
     cy.get(generalElements.arrowRight).click()
     cy.get(boxPage.boxIcon).click()
     cy.get(generalElements.arrowRight).click()
@@ -104,34 +105,28 @@ describe("user can create a box and run it", () => {
     cy.clearCookies()
   })
 
-  // it("user3 checks notification about loteri", () => {
-  //   cy.visit("/login")
-  //   cy.login(users.user3.email, users.user3.password)
-  //   cy.get(generalElements.notificationButton).click()
-  //   cy.contains(
-  //     `У тебя появился подопечный в коробке "${newBoxName}". Скорее переходи по кнопке, чтобы узнать кто это!`
-  //   ).should("exist")
-  //   cy.clearCookies()
-  // })
-
-  Cypress.Commands.add("ApiDeleteBox", (Api) => {
+  after("delete box", () => {
     cy.request({
+      method: "POST",
       url: "/api/login",
       failOnStatusCode: false,
       method: "POST",
       body: {
-        email: "washingtonqwerty@gmail.com",
-        password: "123456",
+        email: users.userAutor.email,
+        password: users.userAutor.password,
       },
     })
 
     cy.request({
-      method: "DELETE",
-      // headers: {
-      //   Cookie:
-      //     "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMwMDEzNzMsImlhdCI6MTY3OTg1NjMxOCwiZXhwIjoxNjc5ODU5OTE4fQ.zw7Ez_LMfpT-4GcvQPyuVkDSXvEEvHwrGw7QMHitUXI; _ym_isad=2; _ohmybid_cmf=2; pm=6roxbbvlalo1wki2kqc48fhs9sa9ejgtkdx; _ym_d=1679856012; _ym_uid=1679344497311567266; adtech_uid=69e67548-3193-4473-a12a-a81bddfe0c60%3Alpitko.ru; top100_id=t1.7627570.2054377752.1679855936257; t3_sid_7627570=s1.717573348.1679855936258.1679856112717.1.7; last_visit=1679848912134%3A%3A1679856112134",
-      // },
-      url: "/api/box/" + idBox,
+      method: "GET",
+      url: "/api/account/boxes",
+    }).then((res) => {
+      let obj = res.body.find((item) => item.box.name == newBoxName)
+      keyBox = obj.box.key
+      cy.request({
+        method: "DELETE",
+        url: "/api/box/" + keyBox,
+      })
     })
   })
 })
