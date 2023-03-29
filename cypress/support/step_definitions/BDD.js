@@ -16,11 +16,11 @@ Given("user logs in as {string} and {string}", function (login, password) {
   cy.login(login, password)
 })
 
-Then("user is on dashboard page", function () {
+Then("user press create box button", function () {
   cy.contains("Создать коробку").click()
 })
 
-Then("user creates a box", function () {
+Then("user fill information about box", function () {
   cy.get(boxPage.boxNameField).type(newBoxName)
   cy.get(boxPage.idBoxField).clear().type(idBox)
   cy.get(generalElements.arrowRight).click()
@@ -32,6 +32,9 @@ Then("user creates a box", function () {
   cy.get(generalElements.arrowRight).click()
   cy.get(generalElements.arrowRight).click()
   cy.get(generalElements.arrowRight).click({ force: true })
+})
+
+Then("user user must see the box name", function () {
   cy.get(dashboardPage.createdBoxName).should("have.text", newBoxName)
   cy.get(".layout-1__header-wrapper-fixed .toggle-menu-item span")
     .invoke("text")

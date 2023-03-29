@@ -61,3 +61,18 @@ Cypress.Commands.add("startLoteri", () => {
   cy.get(loteriPage.submitButton).click({ force: true })
   cy.get(loteriPage.confirmButton).click({ force: true })
 })
+
+Cypress.Commands.add("startLoteri", () => {
+  cy.contains("Перейти к жеребьевке").click({ force: true })
+  cy.get(loteriPage.submitButton).click({ force: true })
+  cy.get(loteriPage.confirmButton).click({ force: true })
+})
+
+Cypress.Commands.add("ApiDeleteBox", (ApiUrl) => {
+  cy.request({
+    method: "DELETE",
+    url: ApiUrl,
+  }).then((response) => {
+    expect(response.status).to.equal(200)
+  })
+})

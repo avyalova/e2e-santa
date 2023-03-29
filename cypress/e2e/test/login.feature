@@ -3,8 +3,9 @@ Feature: User login on santa website
 Scenario: User logs in sucessfully and create a box
 Given user is on the secret santa login page
 When user logs in as "washingtonqwerty@gmail.com" and "123456"
-Then user is on dashboard page
-Then user creates a box
+Then user press create box button
+Then user fill information about box
+Then user user must see the box name
 
 Scenario: User add participants 
 Given user is created box and started to add participants
@@ -26,4 +27,3 @@ Scenario: check notifocation for user2
 Given user2 is on the secret santa login page
 When user2 logs in as "ja-rus_89@mail.ru" and "123456"
 Then check notification for user2
-
